@@ -6,23 +6,25 @@ using System.Text;
 using System.Threading.Tasks;
 using Akka.Actor;
 using TestAkka1.Messages;
+using TestAkka1.Writers;
 
 namespace TestAkka1.Actors
 {
     public class CountSupervisor : ReceiveActor
     {
-        public static Props Create()
+        public static Props Create(IWriteStuff writer)
         {
-            return Props.Create(() => new CountSupervisor());
+            return Props.Create(() => new CountSupervisor(writer));
         }
 
-
-        public CountSupervisor()
+        private readonly IWriteStuff _writer;
+        public CountSupervisor(IWriteStuff writer)
         {
+            _writer = writer;
             Receive<StartCount>(msg =>
             {
                 var fileInfo = new FileInfo(msg.FileName);
-                var lineReader = Context.ActorOf(LineReaderActor.Create(), fileInfo.Name);
+                var lineReader = Context.ActorOf(LineReaderActor.Create(writer), fileInfo.Name);
 
                 using (var reader = fileInfo.OpenText())
                 {

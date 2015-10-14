@@ -7,19 +7,21 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Akka.Actor;
 using TestAkka1.Messages;
+using TestAkka1.Writers;
 
 namespace TestAkka1.Actors
 {
     public class LineReaderActor  : ReceiveActor
     {
-        public static Props Create()
+        public static Props Create(IWriteStuff writer)
         {
-            return Props.Create(() => new LineReaderActor());
+            return Props.Create(() => new LineReaderActor(writer));
         }
 
-        public LineReaderActor()
+        private readonly IWriteStuff _writer;
+        public LineReaderActor(IWriteStuff writer)
         {
-
+            _writer = writer;
             Receive<ReadLineForCounting>(msg =>
             {
                 var cleanFileContents = Regex.Replace(msg.Line, @"[^\u0000-\u007F]", " ");
@@ -30,7 +32,7 @@ namespace TestAkka1.Actors
                     var wordCounter = Context.Child(word);
                     if (wordCounter == ActorRefs.Nobody)
                     {
-                        wordCounter = Context.ActorOf(WordCounterActor.Create(word), word);
+                        wordCounter = Context.ActorOf(WordCounterActor.Create(_writer, word), word);
                     }
 
                     wordCounter.Tell(new CountWord());

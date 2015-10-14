@@ -5,21 +5,24 @@ using System.Text;
 using System.Threading.Tasks;
 using Akka.Actor;
 using TestAkka1.Messages;
+using TestAkka1.Writers;
 
 namespace TestAkka1.Actors
 {
     public class WordCounterActor : ReceiveActor
     {
 
-        public static Props Create(String word)
+        public static Props Create(IWriteStuff writer, String word)
         {
-            return Props.Create(() => new WordCounterActor(word));
+            return Props.Create(() => new WordCounterActor(writer, word));
         }
 
+        private readonly IWriteStuff _writer;
         private String _theWord;
         private Int32 _count;
-        public WordCounterActor(String word)
+        public WordCounterActor(IWriteStuff writer, String word)
         {
+            _writer = writer;
             _theWord = word;
             _count = 0;
 
@@ -32,7 +35,7 @@ namespace TestAkka1.Actors
             {
                 if (_count > 25)
                 {
-                    Console.WriteLine("The word {0} appeared {1} times", _theWord, _count);
+                    _writer.WriteLine("The word {0} appeared {1} times", _theWord, _count);
                 }
             });
         }
