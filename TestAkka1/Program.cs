@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Akka.Actor;
 using TestAkka1.Actors;
 using TestAkka1.Messages;
+using TestAkka1.Writers;
 
 namespace TestAkka1
 {
@@ -13,7 +14,8 @@ namespace TestAkka1
     {
         static void Main(string[] args)
         {
-            var file = PrintInstructionsAndGetFile();
+            var writer = new ConsoleWriter();
+            var file = PrintInstructionsAndGetFile(writer);
             if (file == null)
             {
                 return;
@@ -21,18 +23,18 @@ namespace TestAkka1
 
             var system = ActorSystem.Create("helloAkka");
 
-            var counter = system.ActorOf(CountSupervisor.Create(), "supervisor");
+            var counter = system.ActorOf(CountSupervisor.Create(writer), "supervisor");
             counter.Tell(new StartCount(file));
 
             Console.ReadLine();
         }
 
-        private static String PrintInstructionsAndGetFile()
+        private static String PrintInstructionsAndGetFile(IWriteStuff writer)
         {
-            Console.WriteLine("Word counter.  Select the document to count:");
-            Console.WriteLine(" (1) Magna Carta");
-            Console.WriteLine(" (2) Declaration of Independence");
-            var choice = Console.ReadLine();
+            writer.WriteLine("Word counter.  Select the document to count:");
+            writer.WriteLine(" (1) Magna Carta");
+            writer.WriteLine(" (2) Declaration of Independence");
+            var choice = Console.ReadLine();    //TODO: concrete here
             String file = AppDomain.CurrentDomain.BaseDirectory + @"\Files\";
 
             if (choice.Equals("1"))
@@ -45,7 +47,7 @@ namespace TestAkka1
             }
             else
             {
-                Console.WriteLine("Invalid -- bye!");
+                writer.WriteLine("Invalid -- bye!");
                 return null;
             }
 
