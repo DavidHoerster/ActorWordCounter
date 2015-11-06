@@ -64,6 +64,8 @@
     <Compile Include="Messages\WordCount.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Readers\ConsoleReader.cs" />
+    <Compile Include="Readers\IReadStuff.cs" />
     <Compile Include="Writers\ConsoleWriter.cs" />
     <Compile Include="Writers\IWriteStuff.cs" />
   </ItemGroup>

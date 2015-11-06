@@ -7,6 +7,7 @@ using Akka.Actor;
 using ActorWordCounter.Actors;
 using ActorWordCounter.Messages;
 using ActorWordCounter.Writers;
+using ActorWordCounter.Readers;
 
 namespace ActorWordCounter
 {
@@ -15,7 +16,8 @@ namespace ActorWordCounter
         static void Main(string[] args)
         {
             var writer = new ConsoleWriter();
-            var file = PrintInstructionsAndGetFile(writer);
+            var reader = new ConsoleReader();
+            var file = PrintInstructionsAndGetFile(reader, writer);
             if (file == null)
             {
                 return;
@@ -29,12 +31,12 @@ namespace ActorWordCounter
             Console.ReadLine();
         }
 
-        private static String PrintInstructionsAndGetFile(IWriteStuff writer)
+        private static String PrintInstructionsAndGetFile(IReadStuff reader, IWriteStuff writer)
         {
             writer.WriteLine("Word counter.  Select the document to count:");
             writer.WriteLine(" (1) Magna Carta");
             writer.WriteLine(" (2) Declaration of Independence");
-            var choice = Console.ReadLine();    //TODO: concrete here
+            var choice = reader.ReadLine();
             String file = AppDomain.CurrentDomain.BaseDirectory + @"\Files\";
 
             if (choice.Equals("1"))
