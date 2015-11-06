@@ -28,7 +28,7 @@ namespace ActorWordCounter
             var counter = system.ActorOf(CountSupervisor.Create(writer), "supervisor");
             counter.Tell(new StartCount(file));
 
-            Console.ReadLine();
+            reader.ReadLine();
         }
 
         private static String PrintInstructionsAndGetFile(IReadStuff reader, IWriteStuff writer)
