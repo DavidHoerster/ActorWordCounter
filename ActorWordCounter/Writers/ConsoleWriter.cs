@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TestAkka1.Writers
+namespace ActorWordCounter.Writers
 {
     public class ConsoleWriter : IWriteStuff
     {

@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace ActorWordCounter.Messages
 {
-    public class ReadLineForCounting
+    public class TotalWordCount
     {
-        public readonly String Line;
+        public readonly Int32 TotalCount;
 
-        public ReadLineForCounting(String line) { Line = line; }
+        public TotalWordCount(Int32 total) { TotalCount = total; }
     }
 }
