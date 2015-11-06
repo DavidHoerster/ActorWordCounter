@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Akka.Actor;
-using TestAkka1.Messages;
-using TestAkka1.Writers;
+using ActorWordCounter.Messages;
+using ActorWordCounter.Writers;
 
-namespace TestAkka1.Actors
+namespace ActorWordCounter.Actors
 {
     public class CountSupervisor : ReceiveActor
     {

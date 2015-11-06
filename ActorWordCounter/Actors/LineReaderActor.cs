@@ -6,10 +6,10 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Akka.Actor;
-using TestAkka1.Messages;
-using TestAkka1.Writers;
+using ActorWordCounter.Messages;
+using ActorWordCounter.Writers;
 
-namespace TestAkka1.Actors
+namespace ActorWordCounter.Actors
 {
     public class LineReaderActor  : ReceiveActor
     {
@@ -19,9 +19,13 @@ namespace TestAkka1.Actors
         }
 
         private readonly IWriteStuff _writer;
+        private IActorRef _wordAggregator;
+
         public LineReaderActor(IWriteStuff writer)
         {
             _writer = writer;
+            _wordAggregator = Context.ActorOf(WordCountAggregatorActor.Create(writer), "aggregator");
+
             Receive<ReadLineForCounting>(msg =>
             {
                 var cleanFileContents = Regex.Replace(msg.Line, @"[^\u0000-\u007F]", " ");
@@ -32,7 +36,7 @@ namespace TestAkka1.Actors
                     var wordCounter = Context.Child(word);
                     if (wordCounter == ActorRefs.Nobody)
                     {
-                        wordCounter = Context.ActorOf(WordCounterActor.Create(_writer, word), word);
+                        wordCounter = Context.ActorOf(WordCounterActor.Create(_writer, _wordAggregator, word), word);
                     }
 
                     wordCounter.Tell(new CountWord());
@@ -41,11 +45,15 @@ namespace TestAkka1.Actors
 
             Receive<Complete>(msg =>
             {
+                var childCount = -1;    //TODO: doesn't work with 0
                 var children = Context.GetChildren();
+
                 foreach (var child in children)
                 {
                     child.Tell(new DisplayWordCount());
+                    childCount++;
                 }
+                _wordAggregator.Tell(new TotalWordCount(childCount));
             });
         }
     }

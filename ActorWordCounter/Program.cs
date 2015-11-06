@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Akka.Actor;
-using TestAkka1.Actors;
-using TestAkka1.Messages;
-using TestAkka1.Writers;
+using ActorWordCounter.Actors;
+using ActorWordCounter.Messages;
+using ActorWordCounter.Writers;
 
-namespace TestAkka1
+namespace ActorWordCounter
 {
     class Program
     {

@@ -7,8 +7,8 @@
     <ProjectGuid>{11C180AB-C410-45ED-BD5F-EA8AEA5872CA}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TestAkka1</RootNamespace>
-    <AssemblyName>TestAkka1</AssemblyName>
+    <RootNamespace>ActorWordCounter</RootNamespace>
+    <AssemblyName>ActorWordCounter</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -53,12 +53,15 @@
   <ItemGroup>
     <Compile Include="Actors\CountSupervisor.cs" />
     <Compile Include="Actors\LineReaderActor.cs" />
+    <Compile Include="Actors\WordCountAggregatorActor.cs" />
     <Compile Include="Actors\WordCounterActor.cs" />
     <Compile Include="Messages\Complete.cs" />
     <Compile Include="Messages\CountWord.cs" />
     <Compile Include="Messages\DisplayWordCount.cs" />
     <Compile Include="Messages\ReadLineForCounting.cs" />
     <Compile Include="Messages\StartCount.cs" />
+    <Compile Include="Messages\TotalWordCount.cs" />
+    <Compile Include="Messages\WordCount.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Writers\ConsoleWriter.cs" />
